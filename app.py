@@ -127,9 +127,13 @@ def message(payload):
     text = event.get("text")
     team_id = payload.get("team_id")
     webclient = get_or_create_webclient(team_id)
+    if event.get('bot_id'):
+        return
 
     if subtype == 'message_changed':
         message_dict = event.get('message')
+        if message_dict.get('bot_id'):
+            return
         old_tickets = detect_all_ticket_mentions(event.get('previous_message').get('text'))
         new_tickets = detect_all_ticket_mentions(message_dict.get('text'))
         msg_id = message_dict.get('client_msg_id')
@@ -163,7 +167,10 @@ def message(payload):
     elif subtype == 'message_deleted':
         if channel_id not in ticket_links_sent:
             return
-        msg_id = event.get('previous_message').get('client_msg_id')
+        prev_msg_dict = event.get('previous_message')
+        if prev_msg_dict.get('bot_id'):
+            return
+        msg_id = prev_msg_dict.get('client_msg_id')
         link_maker = ticket_links_sent[channel_id][msg_id]
         msg = link_maker.get_message_payload()
         webclient.chat_delete(**msg)
