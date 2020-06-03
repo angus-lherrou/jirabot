@@ -17,11 +17,22 @@ NO_URL_ERROR = [
 class JirabotLink:
     """Constructs the ticket link message"""
 
-    def __init__(self, channel, url, tickets):
-        self.channel = channel
-        self.url = url
-        self.tickets = tickets
-        self.timestamp = ""
+    def __init__(self, **kwargs):
+        self.channel = kwargs['channel']
+        self.url = kwargs['url']
+        self.tickets = kwargs['tickets']
+        self.timestamp = kwargs['timestamp']
+
+    @classmethod
+    def from_kwargs(cls, **kwargs):
+        return cls(**kwargs)
+
+    @classmethod
+    def from_json(cls, json: dict, url: str, tickets: list):
+        return cls(timestamp=json['ts'],
+                   channel=json['channel'],
+                   url=url,
+                   tickets=tickets)
 
     def get_message_payload(self, error=False):
         return {
@@ -32,7 +43,11 @@ class JirabotLink:
                     *self._get_link_block(),
                 ] if not error else NO_URL_ERROR
             ),
-        }
+        }, self.url, self.tickets
+
+    @staticmethod
+    def amend_message_payload(payload: dict, **kwargs):
+        return payload.update(kwargs)
 
     def _get_link_block(self):
         return [
