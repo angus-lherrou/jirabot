@@ -1,5 +1,5 @@
 """
-jirabot v0.2
+jirabot v0.3
 Angus L'Herrou
 piraka@brandeis.edu
 github.com/angus-lherrou/jirabot
@@ -39,9 +39,24 @@ Table `messages`:
 | tickets    | mediumtext   | NO   |     | NULL    |       |
 +------------+--------------+------+-----+---------+-------+
 """
+attempts = 0
+cnx = None
+exception = None
+while attempts < 3 and cnx is None:
+    try:
+        cnx = mysql.connector.connect(
+            user='root', database='jirabot',
+            password=getpass.getpass(prompt="Enter password for MySQL database: ")
+        )
+    except mysql.connector.errors.ProgrammingError as e:
+        exception = e
+        attempts += 1
+        print(f"Incorrect password (attempt {attempts} of 3)")
+    else:
+        break
+if attempts == 3:
+    raise exception
 
-cnx = mysql.connector.connect(user='root', database='jirabot',
-                              password=getpass.getpass(prompt="Password > "))
 cursor = cnx.cursor()
 
 insert_new_team = ("INSERT INTO teams "

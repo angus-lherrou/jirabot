@@ -1,4 +1,4 @@
-# jirabot v0.2
+# jirabot v0.3
 Tiny Slack app that hyperlinks Service Desk tickets.
 
 ## Details
@@ -8,6 +8,7 @@ If you *must* implement this yourself, you'll need the following:
 
 * a file `.env` in the project directory with the following variables, replacing the values with the relevant details of your Slack app registration:
 ```sh
+export JIRABOT_VENV_PATH='/path/to/venv'
 export SLACK_VERIFICATION_TOKEN=ABCxyz123
 export SLACK_SIGNING_SECRET=123abc
 export SLACK_CLIENT_SECRET=123abc
@@ -39,6 +40,7 @@ Table `messages`:
 +------------+--------------+------+-----+---------+-------+
 ```
 * the packages listed in [requirements.txt](requirements.txt) installed in your Python environment
+* 
 * Python 3.6+
 
 To run the app on Unix, run `./run.sh` and expose port 3000 with your choice of methods. I recommend [ngrok](https://ngrok.com/) for testing purposes.
