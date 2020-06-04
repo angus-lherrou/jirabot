@@ -1,5 +1,5 @@
 """
-jirabot v0.4
+jirabot v0.5
 Angus L'Herrou
 piraka@brandeis.edu
 github.com/angus-lherrou/jirabot
@@ -143,17 +143,29 @@ def make_links(webclient: WebClient, team_id: str, msg_id: str, channel: str, ti
         msg, _, _ = link_maker.get_message_payload()
 
     if url or not error_sent:
-        # Post the message in Slack
-        response = webclient.chat_postMessage(**msg)
+        CURSOR.execute(QUERIES.select_single_message, (team_id, channel, msg_id))
+        if CURSOR.fetchone():
+            # Update the message in Slack
+            response = webclient.chat_update(**msg)
 
-        # Capture the timestamp of the message we've just posted so
-        # we can use it to update the message (?)
+            # Capture the timestamp of the message we've just posted so
+            # we can use it to update the message (?)
+            msg.update(ts=response["ts"])
 
-        msg.update(ts=response["ts"])
+            # update the existing message in the database
+            CURSOR.execute(QUERIES.update_message_payload, (json.dumps(msg), json.dumps(tickets),
+                                                            team_id, channel, msg_id))
+        else:
+            # Post the message in Slack
+            response = webclient.chat_postMessage(**msg)
 
-        # Store the message sent in the database
-        CURSOR.execute(QUERIES.insert_new_message,
-                       (team_id, channel, msg_id, json.dumps(msg), json.dumps(tickets)))
+            # Capture the timestamp of the message we've just posted so
+            # we can use it to update the message (?)
+            msg.update(ts=response["ts"])
+
+            # Store the message sent in the database
+            CURSOR.execute(QUERIES.insert_new_message, (team_id, channel, msg_id,
+                                                        json.dumps(msg), json.dumps(tickets)))
         CNX.commit()
 
 

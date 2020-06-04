@@ -1,5 +1,5 @@
 """
-jirabot v0.4
+jirabot v0.5
 Angus L'Herrou
 piraka@brandeis.edu
 github.com/angus-lherrou/jirabot

@@ -1,5 +1,8 @@
-# jirabot v0.4
+# jirabot v0.5
 Tiny Slack app that hyperlinks Service Desk tickets.
+
+## Latest updates
+* v0.5: fixed a bug where duplicate link messages would sometimes be sent
 
 ## Details
 This app is in development for a personal project and should not be used in production.

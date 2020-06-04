@@ -1,5 +1,5 @@
 """
-jirabot v0.4
+jirabot v0.5
 Angus L'Herrou
 piraka@brandeis.edu
 github.com/angus-lherrou/jirabot
@@ -43,6 +43,7 @@ Queries = namedtuple('Queries', ['insert_new_team',
                                  'update_message_payload',
                                  'delete_message',
                                  'select_messages',
+                                 'select_single_message',
                                  'select_payload_url_and_tickets'])
 
 QUERIES = Queries(
@@ -84,6 +85,10 @@ QUERIES = Queries(
     select_messages=("SELECT msg_id "
                      "FROM messages "
                      "WHERE (team_no, channel_id) = (%s, %s)"),
+
+    select_single_message=("SELECT * "
+                           "FROM messages "
+                           "WHERE (team_no, channel_id, msg_id) = (%s, %s, %s)"),
 
     select_payload_url_and_tickets=("SELECT payload, url, tickets "
                                     "FROM messages AS M, teams AS T "
