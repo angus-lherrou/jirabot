@@ -1,17 +1,11 @@
-NO_URL_ERROR = [
-            {
-                "type": "section",
-                "text":
-                    {
-                        "type": "mrkdwn",
-                        "text":
-                            (
-                                "Error: Service Desk URL not set up yet.\n"
-                                "Use `/sd-url <url>` first."
-                            )
-                    }
-            },
-        ]
+"""
+jirabot v0.4
+Angus L'Herrou
+piraka@brandeis.edu
+github.com/angus-lherrou/jirabot
+
+JirabotLink object for generating bot response payloads.
+"""
 
 
 class JirabotLink:
@@ -34,20 +28,29 @@ class JirabotLink:
                    url=url,
                    tickets=tickets)
 
-    def get_message_payload(self, error=False):
+    def get_message_payload(self, error: str = ''):
         return {
             "ts": self.timestamp,
             "channel": self.channel,
             "blocks": (
                 [
                     *self._get_link_block(),
-                ] if not error else NO_URL_ERROR
+                ] if not error else self._format_error(error)
             ),
         }, self.url, self.tickets
 
     @staticmethod
-    def amend_message_payload(payload: dict, **kwargs):
-        return payload.update(kwargs)
+    def _format_error(msg: str) -> list:
+        return [
+            {
+                "type": "section",
+                "text":
+                    {
+                        "type": "mrkdwn",
+                        "text": msg
+                    }
+            },
+        ]
 
     def _get_link_block(self):
         return [

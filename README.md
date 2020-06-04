@@ -1,4 +1,4 @@
-# jirabot v0.3
+# jirabot v0.4
 Tiny Slack app that hyperlinks Service Desk tickets.
 
 ## Details
@@ -40,7 +40,6 @@ Table `messages`:
 +------------+--------------+------+-----+---------+-------+
 ```
 * the packages listed in [requirements.txt](requirements.txt) installed in your Python environment
-* 
 * Python 3.6+
 
 To run the app on Unix, run `./run.sh` and expose port 3000 with your choice of methods. I recommend [ngrok](https://ngrok.com/) for testing purposes.
