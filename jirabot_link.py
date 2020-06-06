@@ -32,6 +32,7 @@ class JirabotLink:
         return {
             "ts": self.timestamp,
             "channel": self.channel,
+            "text": "Links to tickets mentioned",
             "blocks": (
                 [
                     *self._get_link_block(),

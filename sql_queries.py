@@ -56,7 +56,7 @@ QUERIES = Queries(
                 "WHERE team_no = %s"),
 
     update_error=("UPDATE teams "
-                  "SET error_sent = %d "
+                  "SET error_sent = %s "
                   "WHERE team_no = %s"),
 
     team_exists=("SELECT team_no "
