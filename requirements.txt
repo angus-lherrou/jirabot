@@ -6,4 +6,4 @@ requests~=2.23.0
 mysql-connector-python~=8.0.20
 # gunicorn if building on Unix, waitress if building on Windows
 gunicorn>=20.0.0
-waitress~=1.4.4
+waitress>=2.1.1
